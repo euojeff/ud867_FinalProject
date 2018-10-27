@@ -55,45 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
 
-        new EndpointsAsyncTask().execute();
-    }
+        EndpointsAsyncTask task  = new EndpointsAsyncTask(){
+            @Override
+            protected void onPostExecute(String joke) {
+                Intent intent = new Intent(context, ShowJokeActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, joke);
 
-    class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
-        private MyApi myApiService = null;
-
-        @Override
-        protected String doInBackground(Void... params) {
-            if(myApiService == null) {
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                        new AndroidJsonFactory(), null)
-                        //localhost
-                        .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                        .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                            @Override
-                            public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                                abstractGoogleClientRequest.setDisableGZipContent(true);
-                            }
-                        });
-
-                myApiService = builder.build();
+                startActivity(intent);
             }
+        };
 
-
-            try {
-                return myApiService.getJoke().execute().getData();
-            } catch (IOException e) {
-                return e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String joke) {
-            Intent intent = new Intent(context, ShowJokeActivity.class);
-            intent.putExtra(Intent.EXTRA_TEXT, joke);
-
-            startActivity(intent);
-        }
+        task.execute();
     }
-
-
 }
