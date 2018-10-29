@@ -1,12 +1,7 @@
 package com.udacity.gradle;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.runner.AndroidJUnit4;
 
-
-import com.udacity.gradle.builditbigger.EndpointsAsyncTask;
 
 import junit.framework.Assert;
 
